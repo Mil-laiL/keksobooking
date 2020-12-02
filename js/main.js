@@ -1,7 +1,7 @@
 'use strict';
 
-// module3-task1
 
+// module3-task1
 
 // массив меток
 var pins = [];
