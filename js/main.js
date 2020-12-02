@@ -1,6 +1,7 @@
 'use strict';
 
-//          module3-task1
+// module3-task1
+
 
 // массив меток
 var pins = [];
@@ -33,7 +34,6 @@ var createDataPins = function (urlImg, typeHouse, coordPinX, coordPinY) {
   return data;
 };
 
-
 // запись данных в масив
 for (var i = 1; i <= 8; i++) {
   pins.push(createDataPins('img/avatars/user0' + i + '.png', house[getRandomNum(0, house.length)], getRandomNum(0, 1150), getRandomNum(200, 560)));
@@ -65,7 +65,9 @@ for (i = 0; i < pins.length; i++) {
   fragment.appendChild(renderPins(pins[i].location.x, pins[i].location.y, pins[i].author.avatar, pins[i].offer.type));
 }
 
-//          module4-task1
+
+// module4-task1
+
 
 // функция добавления атрибута
 var addAttribute = function (elem, name, value) {
