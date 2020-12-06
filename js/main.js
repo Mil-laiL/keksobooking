@@ -3,6 +3,7 @@
 
 // module3-task1
 
+
 // массив меток
 var pins = [];
 
@@ -112,7 +113,7 @@ var activateMap = function () {
     deleteAttribute(filters[i], 'disabled');
   }
 
-  // добавление меток на крту
+  // добавление меток на карту
   pinListElement.appendChild(fragment);
 };
 
@@ -141,4 +142,118 @@ mainPin.addEventListener('mouseup', function () {
   getCoordMainPin(mainPinX, mainPinY);
 });
 
-// console.log();
+
+// module4-task2
+
+
+// Поле ввода Заголовок объявления
+var title = document.querySelector('#title');
+
+// Добавление атрибутов обязательного поля и длины вводимых символов
+addAttribute(title, 'type', 'text');
+addAttribute(title, 'required', '');
+addAttribute(title, 'minlength', 30);
+addAttribute(title, 'maxlength', 100);
+
+// Поле ввода Цена за ночь
+var price = document.querySelector('#price');
+
+// Добавление атрибутов обязательного поля, числовое поле и максимальное значение
+addAttribute(price, 'required', '');
+addAttribute(price, 'type', 'number');
+addAttribute(price, 'max', 1000000);
+
+// Выбор типа жилья
+var selectTypeHouse = document.querySelector('#type');
+
+// Функция изменения placeholder и добавление минимального значения в зависимости от выбранного типа жилья
+var changePrice = function (evt) {
+  if (evt.target.value === 'bungalo') {
+    addAttribute(price, 'placeholder', 0);
+    addAttribute(price, 'min', 0);
+  } else if (evt.target.value === 'flat') {
+    addAttribute(price, 'placeholder', 1000);
+    addAttribute(price, 'min', 1000);
+  } else if (evt.target.value === 'house') {
+    addAttribute(price, 'placeholder', 5000);
+    addAttribute(price, 'min', 5000);
+  } else if (evt.target.value === 'palace') {
+    addAttribute(price, 'placeholder', 10000);
+    addAttribute(price, 'min', 10000);
+  }
+};
+
+// вызов функции изменения placeholder
+selectTypeHouse.addEventListener('change', function (evt) {
+  changePrice(evt);
+});
+
+// Ограничение ручного редактирования поля
+addAttribute(addres, 'readonly', '');
+
+// время заезда
+var timeIn = document.querySelector('#timein');
+
+// время выезда
+var timeOut = document.querySelector('#timeout');
+
+// синхронизация выбора времени заезда с временем выезда
+timeIn.addEventListener('change', function () {
+  timeOut.selectedIndex = timeIn.selectedIndex;
+});
+
+// синхронизация выбора времени выезда с временем заезда
+timeOut.addEventListener('change', function () {
+  timeIn.selectedIndex = timeOut.selectedIndex;
+});
+
+// количество комнат
+var roomNumberSelect = document.querySelector('#room_number');
+
+// количество гостей
+var capacityOptions = document.querySelectorAll('#capacity option');
+
+// добавление disabled в поле выбора гостей
+for (i = 0; i < capacityOptions.length; i++) {
+  capacityOptions[i].disabled = true;
+}
+
+// объект количества комнат
+var roomNumber = {
+  one: '1',
+  two: '2',
+  three: '3',
+  hundred: '100'
+};
+
+// функция выбора количества гостей в зависимости от количества комнат
+var selectNumberRoom = function (room, capacity) {
+
+  if (room.value === roomNumber.one) {
+    capacity[0].disabled = true;
+    capacity[1].disabled = true;
+    capacity[2].disabled = false;
+    capacity[3].disabled = true;
+  } else if (room.value === roomNumber.two) {
+    capacity[0].disabled = true;
+    capacity[1].disabled = false;
+    capacity[2].disabled = false;
+    capacity[3].disabled = true;
+  } else if (room.value === roomNumber.three) {
+    capacity[0].disabled = false;
+    capacity[1].disabled = false;
+    capacity[2].disabled = false;
+    capacity[3].disabled = true;
+  } else if (room.value === roomNumber.hundred) {
+    capacity[0].disabled = true;
+    capacity[1].disabled = true;
+    capacity[2].disabled = true;
+    capacity[3].disabled = false;
+  }
+
+};
+
+// вызов функции выбора количества комнат и гостей
+roomNumberSelect.addEventListener('change', function () {
+  selectNumberRoom(roomNumberSelect, capacityOptions);
+});
