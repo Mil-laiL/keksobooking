@@ -117,20 +117,17 @@ var activateMap = function () {
   pinListElement.appendChild(fragment);
 };
 
-// вызов функции активации карты при клике на главную метку
-mainPin.addEventListener('click', function () {
-  activateMap();
-});
-
 // получение поля адреса
 var addres = document.querySelector('#address');
 
 // создание координат главной метки
-var mainPinX = mainPin.offsetLeft;
-var mainPinY = mainPin.offsetTop;
+var startCoordsMainPin = {
+  x: mainPin.offsetLeft,
+  y: mainPin.offsetTop
+};
 
 // запись в поле адреса
-addres.value = mainPinX + ',' + mainPinY;
+addres.value = startCoordsMainPin.x + ',' + startCoordsMainPin.y;
 
 // функция записи координат главной метки в поле адреса
 var getCoordMainPin = function (x, y) {
@@ -139,7 +136,7 @@ var getCoordMainPin = function (x, y) {
 
 // вызов функции записи координат главной метки в поле адреса при событии mouseup
 mainPin.addEventListener('mouseup', function () {
-  getCoordMainPin(mainPinX, mainPinY);
+  getCoordMainPin(startCoordsMainPin.x, startCoordsMainPin.y);
 });
 
 
@@ -257,3 +254,73 @@ var selectNumberRoom = function (room, capacity) {
 roomNumberSelect.addEventListener('change', function () {
   selectNumberRoom(roomNumberSelect, capacityOptions);
 });
+
+
+// module5-task1
+
+
+var DragLimit = {
+  X: {
+    MIN: 1,
+    MAX: 1200 - 65
+  },
+  Y: {
+    MIN: 130,
+    MAX: 630
+  }
+};
+
+
+mainPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.offsetTop,
+    y: evt.offsetLeft
+  };
+
+  var onMouseMove = function (moveEvt) {
+
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    // var mainPinCoords = {
+    //   x: mainPin.offsetTop - shift.x,
+    //   y: mainPin.offsetTop - shift.y,
+    // }
+
+    if ((mainPin.offsetTop - shift.y) > DragLimit.Y.MAX || (mainPin.offsetTop - shift.y) < DragLimit.Y.MIN) {
+      document.removeEventListener('mousemove', onMouseMove);
+    } else if ((mainPin.offsetLeft - shift.x) > DragLimit.X.MAX || (mainPin.offsetLeft - shift.x) < DragLimit.X.MIN) {
+      document.removeEventListener('mousemove', onMouseMove);
+    }
+
+    mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
+    mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+
+    activateMap();
+    getCoordMainPin(mainPin.offsetLeft, mainPin.offsetTop);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
+
+// console.log(startCoordsMainPin.x, startCoordsMainPin.y);
